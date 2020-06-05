@@ -1,6 +1,7 @@
 const request = require('request');
 const fs = require('fs').promises;
 
+
 const fetchMyIP = function (callback) {
   request('https://api.ipify.org/?format=json', (error, response, body) => {
     if (error) {
@@ -60,22 +61,18 @@ const fetchISSFlyOverTimes = (coordinates, callback) => {
 const nextISSTimesForMyLocation = (callback) => {
   const ip = fetchMyIP((error, ip) => {
     if (error) {
-      console.log("It didn't work! ", error);
-      return;
+      return callback(error, null);
     }
-    // console.log("IP Address:", ip);
 
     const coords = fetchCoordsByIP(ip, (error, coords) => {
       if (error) {
-        console.log("It didn't work! ", error);
-        return;
+        return callback(error, null);
       }
-      console.log("Coordinates", coords);
+      // console.log("Coordinates", coords);
 
       const times = fetchISSFlyOverTimes(coords, (error, times) => {
         if (error) {
-          console.log("It didn't work! ", error);
-          return;
+          return callback(error, null);
         }
         // console.log("Flyover Times: ", times);
         return callback(error, times);
